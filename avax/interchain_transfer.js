@@ -28,6 +28,17 @@ cKeychain.importKey(data.privkey)
   console.log("Derived Eth address:", ethAddr)
 
   // 3. Perform transfer
+// Create a X->C export transaction
+await createExport(client, xChain, xKeychain, cKeychain)
+
+// Add some delay to let the transaction clear first, then perform the import
+setTimeout(async function() {
+  await createImport(client, cChain, cKeychain, ethAddr)
+
+  console.log("----------------------------------------------------------------")
+  console.log(`Visit https://cchain.explorer.avax-test.network/address/${ethAddr} for balance details`)
+  console.log("----------------------------------------------------------------")
+}, 3000)
 }
 
 async function createExport(client, xChain, xKeychain, cKeychain) {
@@ -65,18 +76,6 @@ const exportTx = await xChain.buildExportTx(
   const exportTxID = await xChain.issueTx(exportTx.sign(xKeychain))
   console.log("X-Chain export TX:", exportTxID)
   console.log(` - https://explorer.avax-test.network/tx/${exportTxID}`)
-
-// Create a X->C export transaction
-await createExport(client, xChain, xKeychain, cKeychain)
-
-// Add some delay to let the transaction clear first, then perform the import
-setTimeout(async function() {
-  await createImport(client, cChain, cKeychain, ethAddr)
-
-  console.log("----------------------------------------------------------------")
-  console.log(`Visit https://cchain.explorer.avax-test.network/address/${ethAddr} for balance details`)
-  console.log("----------------------------------------------------------------")
-}, 3000)
 }
 
 async function createImport(client, cChain, cKeychain, address) {
