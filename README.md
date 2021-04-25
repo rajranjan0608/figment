@@ -1,0 +1,1 @@
+Each tutorial folder contains .env file which should not be committed. But I have added these in the folders along with API keys for the demo purpose. The keys which you see are now deprecated and hence can't be used.
